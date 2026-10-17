@@ -28,6 +28,7 @@ jobs:
       - name: Integration tests
         env:
           KAFKA_BOOTSTRAP: localhost:9092
+          OXIGRAPH_URL: http://localhost:7878
         run: pytest -m integration -v
       - name: Broker logs on failure
         if: failure()
