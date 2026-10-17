@@ -15,10 +15,23 @@ jobs:
       - run: pip install -e ".[dev]"
       - run: pytest -q
 
-  # Placeholder for the container-based integration test (real Kafka broker).
-  # Cloud sessions can't pull images, but GitHub runners can.
-  # integration:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - run: docker compose -f compose.yaml up -d --wait
+  integration:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e ".[dev,kafka]"
+      - name: Start Kafka
+        run: docker compose up -d --wait
+      - name: Integration tests
+        env:
+          KAFKA_BOOTSTRAP: localhost:9092
+        run: pytest -m integration -v
+      - name: Broker logs on failure
+        if: failure()
+        run: docker compose logs kafka | tail -100
+      - name: Stop Kafka
+        if: always()
+        run: docker compose down -v

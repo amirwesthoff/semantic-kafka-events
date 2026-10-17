@@ -41,10 +41,21 @@ python -m semantic_kafka.cli samples/legacy-erp.event.json mappings/legacy-erp.j
 
 ## Status and next steps
 
-This first version works on JSON files so it runs anywhere, including cloud sessions without Docker registry access. Planned:
+The core works on plain JSON, so it runs anywhere. `kafka_io.py` adds a producer and a consumer that lifts messages per topic using the mapping registered for that topic; events that fail SHACL are rejected instead of merged.
 
-- A real Kafka broker via Docker Compose, with the integration test running in CI.
-- A consumer that lifts events from a topic and writes them to a triplestore.
+Kafka integration test (needs Docker):
+
+```bash
+pip install -e ".[dev,kafka]"
+docker compose up -d --wait
+KAFKA_BOOTSTRAP=localhost:9092 pytest -m integration -v
+docker compose down -v
+```
+
+CI runs this on every push in the `integration` job. Planned:
+
+- Route rejected events to a dead-letter topic.
+- Write lifted events to a triplestore.
 - Provenance and ODRL policies on events for governance.
 - Schema registry integration (Avro/JSON Schema) to generate mappings.
 
