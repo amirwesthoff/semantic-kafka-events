@@ -1,0 +1,47 @@
+@prefix sh:   <http://www.w3.org/ns/shacl#> .
+@prefix sk:   <https://example.org/semantic-kafka#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+
+sk:EventShape a sh:NodeShape ;
+    sh:targetClass sk:Event ;
+    sh:property [
+        sh:path sk:eventId ; sh:datatype xsd:string ;
+        sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "Every event needs exactly one string eventId."
+    ] ;
+    sh:property [
+        sh:path sk:occurredAt ; sh:datatype xsd:dateTime ;
+        sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "Every event needs exactly one xsd:dateTime occurredAt."
+    ] ;
+    sh:property [
+        sh:path prov:wasAttributedTo ; sh:nodeKind sh:IRI ;
+        sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "Every event must name its source system."
+    ] .
+
+sk:OrderPlacedShape a sh:NodeShape ;
+    sh:targetClass sk:OrderPlaced ;
+    sh:property [
+        sh:path sk:aboutOrder ; sh:nodeKind sh:IRI ;
+        sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "OrderPlaced needs exactly one order."
+    ] ;
+    sh:property [
+        sh:path sk:aboutCustomer ; sh:nodeKind sh:IRI ;
+        sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "OrderPlaced needs exactly one customer."
+    ] ;
+    sh:property [
+        sh:path sk:orderTotal ; sh:datatype xsd:decimal ;
+        sh:minInclusive 0 ;
+        sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "orderTotal must be one non-negative xsd:decimal."
+    ] ;
+    sh:property [
+        sh:path sk:currency ; sh:datatype xsd:string ;
+        sh:pattern "^[A-Z]{3}$" ;
+        sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "currency must be one ISO 4217 code such as EUR."
+    ] .

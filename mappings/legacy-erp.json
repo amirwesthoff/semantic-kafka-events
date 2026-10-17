@@ -1,0 +1,14 @@
+{
+  "source": "legacy-erp",
+  "topic": "erp.sales.order_created",
+  "eventClass": "sk:OrderPlaced",
+  "eventIdField": "msg_id",
+  "fields": {
+    "msg_id":       { "property": "sk:eventId", "datatype": "xsd:string" },
+    "ts":           { "property": "sk:occurredAt", "datatype": "xsd:dateTime" },
+    "ord_no":       { "property": "sk:aboutOrder", "iriTemplate": "https://data.example.org/order/{}" },
+    "cust_no":      { "property": "sk:aboutCustomer", "iriTemplate": "https://data.example.org/customer/{}" },
+    "amount_cents": { "property": "sk:orderTotal", "datatype": "xsd:decimal", "scale": 0.01 },
+    "ccy":          { "property": "sk:currency", "datatype": "xsd:string" }
+  }
+}

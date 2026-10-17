@@ -1,0 +1,14 @@
+{
+  "source": "order-service",
+  "topic": "orders.placed.v1",
+  "eventClass": "sk:OrderPlaced",
+  "eventIdField": "eventId",
+  "fields": {
+    "eventId":    { "property": "sk:eventId", "datatype": "xsd:string" },
+    "placedAt":   { "property": "sk:occurredAt", "datatype": "xsd:dateTime" },
+    "orderId":    { "property": "sk:aboutOrder", "iriTemplate": "https://data.example.org/order/{}" },
+    "customerId": { "property": "sk:aboutCustomer", "iriTemplate": "https://data.example.org/customer/{}" },
+    "total":      { "property": "sk:orderTotal", "datatype": "xsd:decimal" },
+    "currency":   { "property": "sk:currency", "datatype": "xsd:string" }
+  }
+}
