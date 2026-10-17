@@ -1,0 +1,63 @@
+@prefix sk:   <https://example.org/semantic-kafka#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+
+<https://example.org/semantic-kafka> a owl:Ontology ;
+    rdfs:label "Semantic Kafka core vocabulary" ;
+    rdfs:comment "Shared business meaning for Kafka events, independent of the producing system's field names." .
+
+# --- Classes -----------------------------------------------------------
+
+sk:Event a owl:Class ;
+    rdfs:label "Event" ;
+    rdfs:comment "Something that happened, as published on a Kafka topic." .
+
+sk:BusinessEvent a owl:Class ;
+    rdfs:subClassOf sk:Event ;
+    rdfs:label "Business event" .
+
+sk:OrderPlaced a owl:Class ;
+    rdfs:subClassOf sk:BusinessEvent ;
+    rdfs:label "Order placed" ;
+    rdfs:comment "A customer placed an order, regardless of which system emitted the event." .
+
+sk:Order a owl:Class ; rdfs:label "Order" .
+sk:Customer a owl:Class ; rdfs:label "Customer" .
+sk:SourceSystem a owl:Class ; rdfs:label "Source system" .
+
+# --- Properties --------------------------------------------------------
+
+sk:eventId a owl:DatatypeProperty ;
+    rdfs:domain sk:Event ; rdfs:range xsd:string ;
+    rdfs:label "event id" .
+
+sk:occurredAt a owl:DatatypeProperty ;
+    rdfs:domain sk:Event ; rdfs:range xsd:dateTime ;
+    rdfs:label "occurred at" .
+
+sk:sourceTopic a owl:DatatypeProperty ;
+    rdfs:domain sk:Event ; rdfs:range xsd:string ;
+    rdfs:label "source topic" .
+
+sk:aboutOrder a owl:ObjectProperty ;
+    rdfs:domain sk:OrderPlaced ; rdfs:range sk:Order ;
+    rdfs:label "about order" .
+
+sk:aboutCustomer a owl:ObjectProperty ;
+    rdfs:domain sk:OrderPlaced ; rdfs:range sk:Customer ;
+    rdfs:label "about customer" .
+
+sk:orderTotal a owl:DatatypeProperty ;
+    rdfs:domain sk:OrderPlaced ; rdfs:range xsd:decimal ;
+    rdfs:label "order total" ;
+    rdfs:comment "Always in major currency units (e.g. euros, not cents)." .
+
+sk:currency a owl:DatatypeProperty ;
+    rdfs:domain sk:OrderPlaced ; rdfs:range xsd:string ;
+    rdfs:label "currency" ;
+    rdfs:comment "ISO 4217 alphabetic code." .
+
+# provenance: which system produced the event
+prov:wasAttributedTo rdfs:range sk:SourceSystem .

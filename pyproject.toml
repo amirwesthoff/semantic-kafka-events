@@ -1,0 +1,20 @@
+[project]
+name = "semantic-kafka-events"
+version = "0.1.0"
+description = "PoC: an RDF semantic layer that standardizes the meaning of Kafka events"
+requires-python = ">=3.10"
+dependencies = ["rdflib>=7", "pyshacl>=0.26"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8"]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
