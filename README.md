@@ -43,19 +43,21 @@ python -m semantic_kafka.cli samples/legacy-erp.event.json mappings/legacy-erp.j
 
 The core works on plain JSON, so it runs anywhere. `kafka_io.py` adds a producer and a consumer that lifts messages per topic using the mapping registered for that topic; events that fail SHACL are rejected instead of merged.
 
-Kafka integration test (needs Docker):
+Rejected events (malformed JSON, missing id, SHACL violations) can be routed to `<topic>.dlq` with the reason and source topic in message headers. Valid events can be written to a triplestore (Oxigraph, via the standard SPARQL 1.1 graph store and query protocols) and queried there.
+
+Integration tests (need Docker):
 
 ```bash
 pip install -e ".[dev,kafka]"
 docker compose up -d --wait
-KAFKA_BOOTSTRAP=localhost:9092 pytest -m integration -v
+KAFKA_BOOTSTRAP=localhost:9092 OXIGRAPH_URL=http://localhost:7878 pytest -m integration -v
 docker compose down -v
 ```
 
 CI runs this on every push in the `integration` job. Planned:
 
-- Route rejected events to a dead-letter topic.
-- Write lifted events to a triplestore.
+- Add a third producer with a different structure, to show the cost of onboarding a system.
+- Provenance and ODRL policies on events.
 - Provenance and ODRL policies on events for governance.
 - Schema registry integration (Avro/JSON Schema) to generate mappings.
 

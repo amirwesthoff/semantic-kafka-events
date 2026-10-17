@@ -22,3 +22,10 @@ services:
       interval: 5s
       timeout: 10s
       retries: 20
+
+  # RDF triplestore (SPARQL 1.1 query + graph store protocols on :7878).
+  # Not pinned to a tag here; pin one once you pick a version.
+  oxigraph:
+    image: ghcr.io/oxigraph/oxigraph:latest
+    ports:
+      - "7878:7878"
